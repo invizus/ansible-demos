@@ -28,3 +28,6 @@ Explanation:
 Run same without `--check` and `--limit` to make changes on all remote servers:
 
 `ansible-playbook playbook.yml -i inventory.ini -u anakin --ask-become`
+
+## Going further
+See what else can you do with ansible https://docs.ansible.com/ansible/latest/collections/index_module.html
