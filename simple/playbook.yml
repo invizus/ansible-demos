@@ -1,0 +1,29 @@
+---
+- hosts: mygroup
+  become: yes
+  
+  tasks:
+
+    - name: install 
+      apt:
+        name: rsyslog
+        state: present
+
+    - name: create directory /tmp/test-a/
+      file:
+        path: /tmp/test-a
+        state: directory
+#        owner: root
+#        group: root
+
+    - name: copy test files to /tmp/test-a/
+      copy: 
+        src: files/code/
+        dest: /tmp/test-a/
+#        owner: root
+#        group: root
+
+    - name: restart rsyslog
+      service:
+        name: rsyslog
+        state: restarted
