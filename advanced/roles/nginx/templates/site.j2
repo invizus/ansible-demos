@@ -1,0 +1,14 @@
+server {
+        listen {{ item.value.port | default(nginx_default_port) }};
+        listen [::]:{{ item.value.port | default(nginx_default_port) }};
+
+        root {{ item.value.www_dir | default(nginx_default_www_dir) }};
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name {{ item.value.server_name }};
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+

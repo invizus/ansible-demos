@@ -1,0 +1,51 @@
+---
+
+- name: install nginx
+  ansible.builtin.apt:
+    name:
+      - nginx
+    state: present
+    update_cache: yes
+  notify:
+    - restart nginx
+  tags: nginx
+
+- name: sites-available configs
+  ansible.builtin.template:
+    src: site.j2
+    dest: /etc/nginx/sites-available/{{ item.key }}
+  notify:
+    - reload nginx
+  with_dict:
+    - "{{ nginx_sites }}"
+  tags: nginx
+
+- name: list of managed sites
+  set_fact:
+    managed_sites: "{{ nginx_sites | list }}"
+  tags: nginx
+
+- name: list of existing sites
+  shell: ls -1 /etc/nginx/sites-enabled
+  register: ls_sites_enabled
+  tags: nginx
+
+- name: remove unmanaged sites
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/{{ item }}
+    state: absent
+  with_items: "{{ ls_sites_enabled.stdout_lines }}"
+  when: item not in managed_sites
+  tags: nginx
+
+- name: enabling sites
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/{{ item.key }}
+    dest: /etc/nginx/sites-enabled/{{ item.key }}
+    state: link
+  notify:
+    - reload nginx
+  with_dict:
+    - "{{ nginx_sites }}"
+  tags: nginx
+
