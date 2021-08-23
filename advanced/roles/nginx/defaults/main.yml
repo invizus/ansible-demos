@@ -1,0 +1,2 @@
+nginx_default_www_dir: /var/www/html
+nginx_default_port: 80

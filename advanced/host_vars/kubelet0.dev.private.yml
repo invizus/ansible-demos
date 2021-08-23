@@ -1,0 +1,10 @@
+nginx_sites:
+  first:
+    port: 80
+    www_dir: /var/www/html
+    server_name: 0.example.com
+  secondvhost:
+    port: 8081
+    www_dir: /var/www/second
+    server_name: 2.example.com
+
